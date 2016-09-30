@@ -24,7 +24,7 @@ public class Ball : MonoBehaviour
 	void LateUpdate()
 	{
 		//Get ball up to minimum speed.
-		if (rig2D.velocity.magnitude < MinSpeed)
+		if (rig2D.velocity.magnitude < MinSpeed && ballInPlay)
 		{
 			rig2D.velocity = Vector2.ClampMagnitude (rig2D.velocity * 10, MinSpeed);
 		}

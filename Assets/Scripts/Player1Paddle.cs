@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PaddleController : MonoBehaviour
+public class Player1Paddle : MonoBehaviour
 {
     public float MovementSpeed = 10f;
 
