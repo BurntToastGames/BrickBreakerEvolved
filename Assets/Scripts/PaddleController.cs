@@ -5,8 +5,6 @@ public class PaddleController : MonoBehaviour
 {
     public float MovementSpeed = 10f;
 
-    public float PaddleCollisionMultX = 1.1f;
-
     private Vector2 playerPos = new Vector2(-5.5f, -3.5f);
 	
 	// Update is called once per frame
@@ -17,11 +15,4 @@ public class PaddleController : MonoBehaviour
         transform.position = playerPos;
 	}
 
-    void OnCollisionEnter2D(Collision2D col)
-    {
-		if(col.gameObject.tag == "Ball")
-		{
-			float incomingSpeed = col.collider.attachedRigidbody.velocity.magnitude;
-		}
-	}
 }

@@ -26,13 +26,11 @@ public class Ball : MonoBehaviour
 		//Get ball up to minimum speed.
 		if (rig2D.velocity.magnitude < MinSpeed)
 		{
-			print("Slow up hoe");
-			rig2D.velocity = Vector2.ClampMagnitude (rig2D.velocity * 1000, MinSpeed);
+			rig2D.velocity = Vector2.ClampMagnitude (rig2D.velocity * 10, MinSpeed);
 		}
 
 		if (rig2D.velocity.magnitude >= MaxSpeed) 
 		{
-			print ("Woah there Sanic!");
 			rig2D.velocity = Vector2.ClampMagnitude (rig2D.velocity, MaxSpeed);
 		}
 	}
