@@ -3,13 +3,15 @@ using System.Collections;
 
 public class Ball : MonoBehaviour
 {
+    public int Player;
+
 	public float MinSpeed = 7.5f;
 	public float MaxSpeed = 40f;
 	public float StartingSpeed = 250f;
 	private Vector2 startVelocity;
 
 
-
+    private GameObject ball;
     private Rigidbody2D rig2D;
 
     private bool ballInPlay = false;
@@ -18,6 +20,7 @@ public class Ball : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        ball = GameObject.FindGameObjectWithTag("Ball" + Player);
         rig2D = GetComponent<Rigidbody2D>();
 	}
 
@@ -38,14 +41,14 @@ public class Ball : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (!ballInPlay && Input.GetButtonDown("Fire1"))
+        if (!ballInPlay && Input.GetButtonDown("Fire" + Player))
         {
-            transform.parent = null;
+            ball.transform.parent = null;
             ballInPlay = true;
             rig2D.isKinematic = false;
 
             //Redirects Ball based on paddle velocity.
-			startVelocity.Set(Input.GetAxis("Horizontal") * StartingSpeed, StartingSpeed);
+			startVelocity.Set(Input.GetAxis("Horizontal" + Player) * StartingSpeed, StartingSpeed);
             rig2D.AddForce(startVelocity);
         }
 
@@ -58,7 +61,7 @@ public class Ball : MonoBehaviour
         if (transform.position.y < -4.5)
         {
             ballInPlay = false;
-            transform.parent = GameObject.FindGameObjectWithTag("Paddle").transform;
+            transform.parent = GameObject.FindGameObjectWithTag("Paddle" + Player).transform;
             rig2D.isKinematic = true;
             rig2D.velocity = Vector2.zero;
             this.transform.position = new Vector2(transform.parent.position.x, transform.parent.position.y + 1.5f * transform.parent.localScale.y);

@@ -10,7 +10,7 @@ public class Player1Paddle : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        float newXPos = transform.position.x + ( Input.GetAxis("Horizontal") * MovementSpeed * Time.deltaTime);
+        float newXPos = transform.position.x + ( Input.GetAxis("Horizontal1") * MovementSpeed * Time.deltaTime);
         playerPos = new Vector2(Mathf.Clamp(newXPos, -9, -2), -3.5f);
         transform.position = playerPos;
 	}
