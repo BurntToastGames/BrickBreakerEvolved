@@ -5,7 +5,7 @@ public class Brick : MonoBehaviour
 {
 	void OnCollisionEnter2D(Collision2D col)
     {
-        GameObject brickBlob = this.transform.parent.gameObject;
+        GameObject brickBlob = this.transform.parent.transform.parent.gameObject;
 
         if(brickBlob.tag == "Bricks1")
         {

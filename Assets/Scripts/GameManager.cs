@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     {
         player1 = new Player()
         {
-            brickCount = GameObject.FindGameObjectWithTag("Bricks1").transform.childCount,
+            brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks1")),
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle1"),
             Ball = GameObject.FindGameObjectWithTag("Ball1")
@@ -18,12 +18,25 @@ public class GameManager : MonoBehaviour {
 
         player2 = new Player()
         {
-            brickCount = GameObject.FindGameObjectWithTag("Bricks2").transform.childCount,
+            brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks2")),
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle2"),
             Ball = GameObject.FindGameObjectWithTag("Ball2")
         };
     }
+
+    int brickCountHelper(GameObject brickGroup)
+    {
+        int brickCount = 0;
+        for (int i = 0; i < brickGroup.transform.childCount; i++)
+        {
+            brickCount += brickGroup.transform.GetChild(i).childCount;
+        }
+
+        return brickCount;
+    }
+
+
     // Update is called once per frame
     void Update ()
     {
@@ -32,7 +45,6 @@ public class GameManager : MonoBehaviour {
 
     void sendBricks(int player)
     {
-
         Player temp = player == 1 ? player1 : player2;
 
         temp.pendingBricks++;
@@ -46,7 +58,7 @@ public class GameManager : MonoBehaviour {
 
 public class Player
 {
-    public int brickCount { get; set; }
+    public int brickCount { get; set; }                     
 
     public int pendingBricks { get; set; }
 
