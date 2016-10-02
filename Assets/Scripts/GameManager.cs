@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     {
         player1 = new Player()
         {
+            BrickGroup = GameObject.FindGameObjectWithTag("Bricks1"),
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks1")),
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle1"),
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour {
 
         player2 = new Player()
         {
+            BrickGroup = GameObject.FindGameObjectWithTag("Bricks2"),
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks2")),
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle2"),
@@ -62,6 +64,7 @@ public class Player
 
     public int pendingBricks { get; set; }
 
+    public GameObject BrickGroup { get; set; }
     public GameObject Paddle { get; set; }
     public GameObject Ball { get; set; }
 
