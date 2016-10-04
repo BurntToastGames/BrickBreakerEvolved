@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle2"),
             Ball = GameObject.FindGameObjectWithTag("Ball2"),
-            recentlyAddedLineY = 0
+            recentlyAddedLineY = 12
         };
     }
     int brickCountHelper(GameObject brickGroup)
