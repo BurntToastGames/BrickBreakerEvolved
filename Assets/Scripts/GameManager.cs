@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -13,11 +14,17 @@ public class GameManager : MonoBehaviour {
 	private float p1AddLineYOffset = 0;
 	private float p2AddLineYOffset = 12;
 
+	private Text player1PendingText;
+	private Text player2PendingText;
+
     
 
 	// Use this for initialization
 	void Start ()
     {
+		player1PendingText = GameObject.Find("Player 1 Pending").GetComponent<Text>();
+		player2PendingText = GameObject.Find("Player 2 Pending").GetComponent<Text>();
+
         player1 = new Player()
         {
             BrickGroup = GameObject.FindGameObjectWithTag("Bricks1"),
@@ -65,12 +72,16 @@ public class GameManager : MonoBehaviour {
         tempPlayer.pendingBricks+=2;
         tempPlayer.brickCount--;
 
+
+
+
 		if (tempPlayer.pendingBricks >= bricksPerLine)
 		{
 			AddLine (tempPlayer, victim);
 		}
 
-        print("Player" + player + " : " + tempPlayer.pendingBricks + " pending");
+		player1PendingText.text = "Pending : " + player2.pendingBricks;
+		player2PendingText.text = "Pending : " + player1.pendingBricks;
     }
 
 	void AddLine(Player tempPlayer , Player victim)
