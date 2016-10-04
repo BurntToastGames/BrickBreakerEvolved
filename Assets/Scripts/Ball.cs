@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Ball : MonoBehaviour
 {
+	public GameObject DeathParticles;
+
     public int Player;
 
 	public float MinSpeed = 7.5f;
@@ -60,6 +62,8 @@ public class Ball : MonoBehaviour
         //Ball OOB + Reset
         if (transform.position.y < -4.5)
         {
+			Destroy(Instantiate (DeathParticles, gameObject.transform.position, Quaternion.identity) , 4);
+
             ballInPlay = false;
             transform.parent = GameObject.FindGameObjectWithTag("Paddle" + Player).transform;
             rig2D.isKinematic = true;

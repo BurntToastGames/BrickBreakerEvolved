@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour {
     private int bricksPerLine = 12;
     private float lineSpaceConst = 1.14f;
 
+	private float p1AddLineYOffset = 0;
+	private float p2AddLineYOffset = 12;
+
     
 
 	// Use this for initialization
@@ -22,7 +25,7 @@ public class GameManager : MonoBehaviour {
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle1"),
             Ball = GameObject.FindGameObjectWithTag("Ball1"),
-            recentlyAddedLineY = 0
+			recentlyAddedLineY = p1AddLineYOffset
         };
 
         player2 = new Player()
@@ -32,7 +35,7 @@ public class GameManager : MonoBehaviour {
             pendingBricks = 0,
             Paddle = GameObject.FindGameObjectWithTag("Paddle2"),
             Ball = GameObject.FindGameObjectWithTag("Ball2"),
-            recentlyAddedLineY = 12
+			recentlyAddedLineY = p2AddLineYOffset
         };
     }
     int brickCountHelper(GameObject brickGroup)
@@ -59,30 +62,36 @@ public class GameManager : MonoBehaviour {
         Player tempPlayer = player == 1 ? player1 : player2;
         Player victim = player == 2 ? player1 : player2;
 
-        tempPlayer.pendingBricks++;
+        tempPlayer.pendingBricks+=2;
         tempPlayer.brickCount--;
 
-        if(tempPlayer.pendingBricks == bricksPerLine)
-        {
-            tempPlayer.pendingBricks -= bricksPerLine;
-
-            Vector3 newBrickGroupPosition = new Vector3(victim.BrickGroup.transform.position.x,
-                                                        victim.BrickGroup.transform.position.y - (lineSpaceConst * victim.BrickGroup.transform.localScale.y));
-
-            victim.BrickGroup.transform.position = newBrickGroupPosition;
-
-            Vector3 newLinePositionWithinParent = new Vector3(0, victim.recentlyAddedLineY + lineSpaceConst);
-            victim.recentlyAddedLineY += lineSpaceConst;
-
-            GameObject newLine = Instantiate(LinePrefab, victim.BrickGroup.transform.position, Quaternion.identity) as GameObject;
-            newLine.transform.parent = victim.BrickGroup.transform;
-            newLine.transform.localPosition = newLinePositionWithinParent;
-            newLine.transform.localScale = Vector3.one;
-        }
+		if (tempPlayer.pendingBricks >= bricksPerLine)
+		{
+			AddLine (tempPlayer, victim);
+		}
 
         print("Player" + player + " : " + tempPlayer.pendingBricks + " pending");
     }
+
+	void AddLine(Player tempPlayer , Player victim)
+	{
+		tempPlayer.pendingBricks -= bricksPerLine;
+
+		Vector3 newBrickGroupPosition = new Vector3(victim.BrickGroup.transform.position.x,
+		victim.BrickGroup.transform.position.y - (lineSpaceConst * victim.BrickGroup.transform.localScale.y));
+
+		victim.BrickGroup.transform.position = newBrickGroupPosition;
+
+		Vector3 newLinePositionWithinParent = new Vector3(0, victim.recentlyAddedLineY + lineSpaceConst);
+		victim.recentlyAddedLineY += lineSpaceConst;
+
+		GameObject newLine = Instantiate(LinePrefab, victim.BrickGroup.transform.position, Quaternion.identity) as GameObject;
+		newLine.transform.parent = victim.BrickGroup.transform;
+		newLine.transform.localPosition = newLinePositionWithinParent;
+		newLine.transform.localScale = Vector3.one;	
+	}
 }
+
 
 
 public class Player
