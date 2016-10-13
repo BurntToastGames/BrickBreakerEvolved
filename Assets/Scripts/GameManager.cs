@@ -8,7 +8,10 @@ public class GameManager : MonoBehaviour {
 
     public GameObject LinePrefab;
 
-    private int bricksPerLine = 12;
+    private int bricksPerLine = 12;    //bricks needed to send a line.
+    private float scorePerBrick = 50f; //score needed to send a brick.
+    private float brickValue = 100f;    //default score awarded per brick hit.
+
     private float lineSpaceConst = 1.14f;
 
 	private float p1AddLineYOffset = 0;
@@ -27,21 +30,31 @@ public class GameManager : MonoBehaviour {
 
         player1 = new Player()
         {
-            BrickGroup = GameObject.FindGameObjectWithTag("Bricks1"),
+            score = 0,
+            comboCount = 0,
+
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks1")),
             pendingBricks = 0,
+
+            BrickGroup = GameObject.FindGameObjectWithTag("Bricks1"),
             Paddle = GameObject.FindGameObjectWithTag("Paddle1"),
             Ball = GameObject.FindGameObjectWithTag("Ball1"),
+
 			recentlyAddedLineY = p1AddLineYOffset
         };
 
         player2 = new Player()
         {
-            BrickGroup = GameObject.FindGameObjectWithTag("Bricks2"),
+            score = 0,
+            comboCount = 0,
+
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks2")),
             pendingBricks = 0,
+
+            BrickGroup = GameObject.FindGameObjectWithTag("Bricks2"),
             Paddle = GameObject.FindGameObjectWithTag("Paddle2"),
             Ball = GameObject.FindGameObjectWithTag("Ball2"),
+
 			recentlyAddedLineY = p2AddLineYOffset
         };
     }
@@ -63,17 +76,14 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-
+    // *Messenger Method*
+    // Sends bricks to the opponent of 'player' based on the player's current combo. Manages score too.
     void sendBricks(int player)
     {
         Player tempPlayer = player == 1 ? player1 : player2;
         Player victim = player == 2 ? player1 : player2;
 
-        tempPlayer.pendingBricks+=2;
-        tempPlayer.brickCount--;
-
-
-
+        AwardScore(tempPlayer);
 
 		if (tempPlayer.pendingBricks >= bricksPerLine)
 		{
@@ -82,6 +92,29 @@ public class GameManager : MonoBehaviour {
 
 		player1PendingText.text = "Pending : " + player2.pendingBricks;
 		player2PendingText.text = "Pending : " + player1.pendingBricks;
+    }
+
+    // *Messenger Method*
+    // Resets combo of a player.
+    void resetCombo(int player)
+    {
+        Player tempPlayer = player == 1 ? player1 : player2;
+
+        tempPlayer.comboCount = 0;
+    }
+
+    // Awards Score to a player upon breaking a brick.
+    // Adds appropriate amount of bricks based on score.
+    void AwardScore(Player tempPlayer)
+    {
+        float brickScore = brickValue + (brickValue * tempPlayer.comboCount) / 10;
+        tempPlayer.score += brickScore;
+        tempPlayer.comboCount++;
+
+        tempPlayer.pendingBricks += (int)(brickScore / scorePerBrick);
+        print((int)(brickScore / scorePerBrick) + " pending bricks added");
+
+        tempPlayer.brickCount--;
     }
 
 	void AddLine(Player tempPlayer , Player victim)
@@ -107,9 +140,12 @@ public class GameManager : MonoBehaviour {
 
 public class Player
 {
+    public float score { get; set; }
+    public int comboCount { get; set; }
+
     public int brickCount { get; set; }                     
 
-    public int pendingBricks { get; set; }
+    public int pendingBricks { get; set; }  // Bricks player will send to victim.
 
     public GameObject BrickGroup { get; set; }
     public GameObject Paddle { get; set; }

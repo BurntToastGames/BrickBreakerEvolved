@@ -15,4 +15,12 @@ public class Player1Paddle : MonoBehaviour
         transform.position = playerPos;
 	}
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.gameObject.tag == "Ball1")
+        {
+            GameObject.FindGameObjectWithTag("Game Manager").SendMessage("resetCombo", 1);
+        }
+    }
+
 }

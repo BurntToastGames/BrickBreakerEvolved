@@ -31,12 +31,13 @@ public class Ball : MonoBehaviour
 		//Get ball up to minimum speed.
 		if (rig2D.velocity.magnitude < MinSpeed && ballInPlay)
 		{
-			rig2D.velocity = Vector2.ClampMagnitude (rig2D.velocity * 10, MinSpeed);
+			rig2D.velocity = Vector2.ClampMagnitude(rig2D.velocity * 10, MinSpeed);
 		}
 
+        //Clamp maximum ball speed.
 		if (rig2D.velocity.magnitude >= MaxSpeed) 
 		{
-			rig2D.velocity = Vector2.ClampMagnitude (rig2D.velocity, MaxSpeed);
+			rig2D.velocity = Vector2.ClampMagnitude(rig2D.velocity, MaxSpeed);
 		}
 	}
 	
@@ -69,6 +70,16 @@ public class Ball : MonoBehaviour
             rig2D.isKinematic = true;
             rig2D.velocity = Vector2.zero;
             this.transform.position = new Vector2(transform.parent.position.x, transform.parent.position.y + 1.5f * transform.parent.localScale.y);
+
+            //Reset the player's combo
+            if(gameObject.tag == "Ball1")
+            {
+                GameObject.FindGameObjectWithTag("Game Manager").SendMessage("resetCombo", 1);
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag("Game Manager").SendMessage("resetCombo", 2);
+            }
         }
     }
 		

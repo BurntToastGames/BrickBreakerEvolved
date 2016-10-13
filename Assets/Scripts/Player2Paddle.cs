@@ -15,4 +15,12 @@ public class Player2Paddle : MonoBehaviour
         playerPos = new Vector2(Mathf.Clamp(newXPos, 2, 9), -3.5f);
         transform.position = playerPos;
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ball2")
+        {
+            GameObject.FindGameObjectWithTag("Game Manager").SendMessage("resetCombo", 2);
+        }
+    }
 }
