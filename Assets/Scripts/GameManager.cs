@@ -20,13 +20,19 @@ public class GameManager : MonoBehaviour {
 	private Text player1PendingText;
 	private Text player2PendingText;
 
-    
+    private Text player1ScoreText;
+    private Text player2ScoreText;
 
-	// Use this for initialization
-	void Start ()
+
+
+    // Use this for initialization
+    void Start ()
     {
 		player1PendingText = GameObject.Find("Player 1 Pending").GetComponent<Text>();
 		player2PendingText = GameObject.Find("Player 2 Pending").GetComponent<Text>();
+
+        player1ScoreText = GameObject.Find("Player 1 Score").GetComponent<Text>();
+        player2ScoreText = GameObject.Find("Player 2 Score").GetComponent<Text>();
 
         player1 = new Player()
         {
@@ -92,6 +98,9 @@ public class GameManager : MonoBehaviour {
 
 		player1PendingText.text = "Pending : " + player2.pendingBricks;
 		player2PendingText.text = "Pending : " + player1.pendingBricks;
+
+        player1ScoreText.text = "Score : " + player1.score;
+        player2ScoreText.text = "Score : " + player2.score;
     }
 
     // *Messenger Method*
