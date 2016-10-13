@@ -4,9 +4,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public Player player1, player2;
-
+	public Player player1, player2;
     public GameObject LinePrefab;
+	public GameObject gameOverPanel;
+	public int maxLineCount;
 
     private int bricksPerLine = 12;    //bricks needed to send a line.
     private float scorePerBrick = 50f; //score needed to send a brick.
@@ -23,21 +24,28 @@ public class GameManager : MonoBehaviour {
     private Text player1ScoreText;
     private Text player2ScoreText;
 
-
+	private Text gameOverText;
 
     // Use this for initialization
     void Start ()
     {
+
+		Time.timeScale = 1f;
 		player1PendingText = GameObject.Find("Player 1 Pending").GetComponent<Text>();
 		player2PendingText = GameObject.Find("Player 2 Pending").GetComponent<Text>();
 
         player1ScoreText = GameObject.Find("Player 1 Score").GetComponent<Text>();
         player2ScoreText = GameObject.Find("Player 2 Score").GetComponent<Text>();
 
+		gameOverText = GameObject.Find("OutcomeText").GetComponent<Text>();
+
+		gameOverPanel.SetActive (false);
+
         player1 = new Player()
         {
             score = 0,
             comboCount = 0,
+			name = "Player1",
 
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks1")),
             pendingBricks = 0,
@@ -53,6 +61,7 @@ public class GameManager : MonoBehaviour {
         {
             score = 0,
             comboCount = 0,
+			name = "Player2",
 
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks2")),
             pendingBricks = 0,
@@ -79,9 +88,38 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-
+		checkClearVictory (player1, player2);
 	}
+	//End the game, display the GameOver panel, stop time, and display outcome text
+	void gameOver(Player winner, Player loser)
+	{
+		print ("GameOver");		
+		gameOverPanel.SetActive(true);
+		gameOverText.text = winner.name + " beat " + loser.name;
+		Time.timeScale = 0f;
+	}
+	//Check who has won the game based on number of lines in each player's screen (more conditions to be added)
+	void checkClearVictory(Player player1, Player player2)
+	{
+		if (player1.BrickGroup.transform.childCount == 0) {
+			gameOver(player1, player2);
+		}
+		if (player2.BrickGroup.transform.childCount == 0) {
+			gameOver(player2, player1);
+		}
+	}
+	void checkLineVictory(Player player1, Player player2)
+	{
+		print ("Player1BrickLines :" + player1.BrickGroup.transform.childCount);
+		print ("Player2BrickLines :" + player2.BrickGroup.transform.childCount);
 
+		if (player1.BrickGroup.transform.childCount > maxLineCount) {
+			gameOver(player2, player1);
+		}
+		if (player2.BrickGroup.transform.childCount > maxLineCount) {
+			gameOver(player1, player2);
+		}
+	}
     // *Messenger Method*
     // Sends bricks to the opponent of 'player' based on the player's current combo. Manages score too.
     void sendBricks(int player)
@@ -101,6 +139,8 @@ public class GameManager : MonoBehaviour {
 
         player1ScoreText.text = "Score : " + player1.score;
         player2ScoreText.text = "Score : " + player2.score;
+
+		checkLineVictory(player1, player2);
     }
 
     // *Messenger Method*
@@ -121,7 +161,7 @@ public class GameManager : MonoBehaviour {
         tempPlayer.comboCount++;
 
         tempPlayer.pendingBricks += (int)(brickScore / scorePerBrick);
-        print((int)(brickScore / scorePerBrick) + " pending bricks added");
+        //print((int)(brickScore / scorePerBrick) + " pending bricks added");
 
         tempPlayer.brickCount--;
     }
@@ -145,8 +185,6 @@ public class GameManager : MonoBehaviour {
 	}
 }
 
-
-
 public class Player
 {
     public float score { get; set; }
@@ -161,6 +199,8 @@ public class Player
     public GameObject Ball { get; set; }
 
     internal float recentlyAddedLineY;
+
+	public string name { get; set; }
 
     public Player()
     { }
