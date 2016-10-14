@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour {
         {
             score = 0,
             comboCount = 0,
-			name = "Player1",
+			name = "Player 1",
 
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks1")),
             pendingBricks = 0,
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour {
         {
             score = 0,
             comboCount = 0,
-			name = "Player2",
+			name = "Player 2",
 
             brickCount = brickCountHelper(GameObject.FindGameObjectWithTag("Bricks2")),
             pendingBricks = 0,
@@ -88,35 +88,37 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-		checkClearVictory (player1, player2);
-	}
+        //Victory by board clear.
+        checkClearVictory(player1, player2);
+    }
+
 	//End the game, display the GameOver panel, stop time, and display outcome text
 	void gameOver(Player winner, Player loser)
 	{
 		print ("GameOver");		
 		gameOverPanel.SetActive(true);
-		gameOverText.text = winner.name + " beat " + loser.name;
+        gameOverText.text = winner.name + " wins!";
 		Time.timeScale = 0f;
 	}
 	//Check who has won the game based on number of lines in each player's screen (more conditions to be added)
 	void checkClearVictory(Player player1, Player player2)
 	{
-		if (player1.BrickGroup.transform.childCount == 0) {
+		if (player1.BrickGroup.transform.childCount <= 0) {
 			gameOver(player1, player2);
 		}
-		if (player2.BrickGroup.transform.childCount == 0) {
+		if (player2.BrickGroup.transform.childCount <= 0) {
 			gameOver(player2, player1);
 		}
 	}
 	void checkLineVictory(Player player1, Player player2)
 	{
-		print ("Player1BrickLines :" + player1.BrickGroup.transform.childCount);
+		//print ("Player1BrickLines :" + player1.BrickGroup.transform.childCount);
 		print ("Player2BrickLines :" + player2.BrickGroup.transform.childCount);
 
-		if (player1.BrickGroup.transform.childCount > maxLineCount) {
+		if (player1.BrickGroup.transform.childCount >= maxLineCount) {
 			gameOver(player2, player1);
 		}
-		if (player2.BrickGroup.transform.childCount > maxLineCount) {
+		if (player2.BrickGroup.transform.childCount >= maxLineCount) {
 			gameOver(player1, player2);
 		}
 	}
@@ -129,6 +131,7 @@ public class GameManager : MonoBehaviour {
 
         AwardScore(tempPlayer);
 
+        //Minor bug on adding more than bricksPerLine to pendingBricks.
 		if (tempPlayer.pendingBricks >= bricksPerLine)
 		{
 			AddLine (tempPlayer, victim);
@@ -140,6 +143,8 @@ public class GameManager : MonoBehaviour {
         player1ScoreText.text = "Score : " + player1.score;
         player2ScoreText.text = "Score : " + player2.score;
 
+
+        //Victory by Line #
 		checkLineVictory(player1, player2);
     }
 
