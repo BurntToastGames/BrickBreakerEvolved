@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour {
 	public GameObject gameOverPanel;
 	public int maxLineCount;
 
-    private int bricksPerLine = 12;    //bricks needed to send a line.
-    private float scorePerBrick = 50f; //score needed to send a brick.
-    private float brickValue = 100f;    //default score awarded per brick hit.
+    public int bricksPerLine = 12;    //bricks needed to send a line.
+    public float scorePerBrick = 50f; //score needed to send a brick.
+    public float brickValue = 100f;    //default score awarded per brick hit.
 
     private float lineSpaceConst = 1.14f;
 
