@@ -24,12 +24,14 @@ public class GameManager : MonoBehaviour {
     private Text player1ScoreText;
     private Text player2ScoreText;
 
-	private Text gameOverText;
+    private Text player1WinsText;
+    private Text player2WinsText;
+
+    private Text gameOverText;
 
     // Use this for initialization
     void Start ()
     {
-
 		Time.timeScale = 1f;
 		player1PendingText = GameObject.Find("Player 1 Pending").GetComponent<Text>();
 		player2PendingText = GameObject.Find("Player 2 Pending").GetComponent<Text>();
@@ -37,12 +39,18 @@ public class GameManager : MonoBehaviour {
         player1ScoreText = GameObject.Find("Player 1 Score").GetComponent<Text>();
         player2ScoreText = GameObject.Find("Player 2 Score").GetComponent<Text>();
 
+        player1WinsText = GameObject.Find("Player 1 Wins").GetComponent<Text>();
+        player2WinsText = GameObject.Find("Player 2 Wins").GetComponent<Text>();
+
 		gameOverText = GameObject.Find("OutcomeText").GetComponent<Text>();
 
 		gameOverPanel.SetActive (false);
 
+        
         player1 = new Player()
         {
+            wins = 0,
+
             score = 0,
             comboCount = 0,
 			name = "Player 1",
@@ -59,6 +67,8 @@ public class GameManager : MonoBehaviour {
 
         player2 = new Player()
         {
+            wins = 0,
+
             score = 0,
             comboCount = 0,
 			name = "Player 2",
@@ -72,6 +82,9 @@ public class GameManager : MonoBehaviour {
 
 			recentlyAddedLineY = p2AddLineYOffset
         };
+
+        player1WinsText.text = player1.wins.ToString();
+        player2WinsText.text = player2.wins.ToString();
     }
     int brickCountHelper(GameObject brickGroup)
     {
@@ -98,7 +111,12 @@ public class GameManager : MonoBehaviour {
 		print ("GameOver");		
 		gameOverPanel.SetActive(true);
         gameOverText.text = winner.name + " wins!";
-		Time.timeScale = 0f;
+
+        winner.wins++;
+        player1WinsText.text = winner.wins.ToString();
+        player2WinsText.text = loser.wins.ToString();
+		
+        Time.timeScale = 0f;
 	}
 	
     //Check who has won the game based on number of lines in each player's screen (more conditions to be added)
@@ -209,6 +227,8 @@ public class GameManager : MonoBehaviour {
 
 public class Player
 {
+    public int wins { get; set; }
+
     public float score { get; set; }
     public int comboCount { get; set; }
 
