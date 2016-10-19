@@ -100,7 +100,8 @@ public class GameManager : MonoBehaviour {
         gameOverText.text = winner.name + " wins!";
 		Time.timeScale = 0f;
 	}
-	//Check who has won the game based on number of lines in each player's screen (more conditions to be added)
+	
+    //Check who has won the game based on number of lines in each player's screen (more conditions to be added)
 	void checkClearVictory(Player player1, Player player2)
 	{
 		if (player1.BrickGroup.transform.childCount <= 0) {
@@ -122,6 +123,7 @@ public class GameManager : MonoBehaviour {
 			gameOver(player1, player2);
 		}
 	}
+    
     // *Messenger Method*
     // Sends bricks to the opponent of 'player' based on the player's current combo. Manages score too.
     void sendBricks(int player)
@@ -129,10 +131,10 @@ public class GameManager : MonoBehaviour {
         Player tempPlayer = player == 1 ? player1 : player2;
         Player victim = player == 2 ? player1 : player2;
 
-        AwardScore(tempPlayer);
+        AwardScore(tempPlayer, victim);
 
         //Minor bug on adding more than bricksPerLine to pendingBricks.
-		if (tempPlayer.pendingBricks >= bricksPerLine)
+		while (tempPlayer.pendingBricks >= bricksPerLine)
 		{
 			AddLine (tempPlayer, victim);
 		}
@@ -159,13 +161,28 @@ public class GameManager : MonoBehaviour {
 
     // Awards Score to a player upon breaking a brick.
     // Adds appropriate amount of bricks based on score.
-    void AwardScore(Player tempPlayer)
+    void AwardScore(Player tempPlayer ,Player tempVictim)
     {
+        //Calculate and award score , increment combo count.
         float brickScore = brickValue + (brickValue * tempPlayer.comboCount) / 10;
         tempPlayer.score += brickScore;
         tempPlayer.comboCount++;
 
-        tempPlayer.pendingBricks += (int)(brickScore / scorePerBrick);
+        int bricksToSend = (int)(brickScore / scorePerBrick);
+
+        if (tempVictim.pendingBricks > 0)
+        {
+            int initialVictimPendingBricks = tempVictim.pendingBricks;
+
+            tempVictim.pendingBricks = (tempVictim.pendingBricks - bricksToSend) < 0 ? 0 : tempVictim.pendingBricks - bricksToSend;
+            bricksToSend = bricksToSend - initialVictimPendingBricks;
+            tempPlayer.pendingBricks = bricksToSend > 0 ? tempPlayer.pendingBricks + bricksToSend : tempPlayer.pendingBricks;
+        }
+        else
+        {
+            tempPlayer.pendingBricks += (int)(brickScore / scorePerBrick);
+        }
+
         //print((int)(brickScore / scorePerBrick) + " pending bricks added");
 
         tempPlayer.brickCount--;
