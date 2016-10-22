@@ -15,7 +15,7 @@ public class Player1Paddle : MonoBehaviour
         transform.position = playerPos;
 	}
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collision2D col)
     {
         if(col.gameObject.tag == "Ball1")
         {

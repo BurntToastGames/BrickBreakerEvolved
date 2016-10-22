@@ -2,8 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour {
-
+public class GameManager : MonoBehaviour
+{
 	public Player player1, player2;
     public GameObject LinePrefab;
 	public GameObject gameOverPanel;
@@ -151,7 +151,6 @@ public class GameManager : MonoBehaviour {
 
         AwardScore(tempPlayer, victim);
 
-        //Minor bug on adding more than bricksPerLine to pendingBricks.
 		while (tempPlayer.pendingBricks >= bricksPerLine)
 		{
 			AddLine (tempPlayer, victim);
@@ -162,7 +161,6 @@ public class GameManager : MonoBehaviour {
 
         player1ScoreText.text = "Score : " + player1.score;
         player2ScoreText.text = "Score : " + player2.score;
-
 
         //Victory by Line #
 		checkLineVictory(player1, player2);
@@ -223,6 +221,13 @@ public class GameManager : MonoBehaviour {
 		newLine.transform.localPosition = newLinePositionWithinParent;
 		newLine.transform.localScale = Vector3.one;	
 	}
+
+    void applyPowerUp(applyPowerUpInfo info)
+    {
+        Player player = info.player == 1 ? player1 : player2;
+
+        Power.Apply(info.powerUpKey, player);
+    }
 }
 
 public class Player
@@ -246,4 +251,23 @@ public class Player
 
     public Player()
     { }
+}
+
+public class Power : MonoBehaviour
+{
+    public static void Apply(PowerUpKey power, Player player)
+    {
+        switch (power)
+        {
+            case PowerUpKey.Test:
+                Test(player);
+                break;
+            
+        }
+    }
+
+    static void Test(Player player)
+    {
+        print("PowerUp Received on " + player.name);
+    }
 }
