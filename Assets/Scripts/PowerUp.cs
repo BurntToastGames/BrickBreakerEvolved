@@ -27,7 +27,7 @@ public class PowerUp : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         print(col.gameObject.name);
         if(col.gameObject == PowerUpPaddle)
@@ -35,7 +35,7 @@ public class PowerUp : MonoBehaviour
             print("gottem");
             GameObject.Find("Game Manager").SendMessage("applyPowerUp", new applyPowerUpInfo { player = col.gameObject.tag.EndsWith("1") ? 1 : 2 ,
                                                                                                powerUpKey = PowerUpKey.Test} );
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 }

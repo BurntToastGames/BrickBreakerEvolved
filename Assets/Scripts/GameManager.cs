@@ -261,8 +261,7 @@ public class Power : MonoBehaviour
         {
             case PowerUpKey.Test:
                 Test(player);
-                break;
-            
+                break;   
         }
     }
 
