@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -274,22 +275,15 @@ public class Power : MonoBehaviour
 
 	static void GrowPaddle(Player player)//Grow paddle by 33% when the player collects the GrowPaddle powerup
 	{
-		Vector3 originalVector = player.Paddle.transform.localScale;
 		if (player.Paddle.transform.childCount > 0) 
 		{
 			player.Ball.transform.parent = null;
-
-			float interpolate = 0.1f;
-
-			while (interpolate < 1f) {
-				player.Paddle.transform.localScale = Vector3.Lerp( originalVector, paddleGrowAmount * originalVector, interpolate);
-			}
-
+			player.Paddle.transform.DOScaleX (paddleGrowAmount, 1);
 			player.Ball.transform.parent = player.Paddle.transform;
 		} 
 		else 
 		{
-			//player.Paddle.transform.localScale = Vector3.Lerp(paddleGrowAmount, 0f, 0f);
+			player.Paddle.transform.DOScaleX (paddleGrowAmount, 1);
 		}
 	}
 }

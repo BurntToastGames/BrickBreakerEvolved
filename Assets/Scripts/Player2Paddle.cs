@@ -3,16 +3,21 @@ using System.Collections;
 
 public class Player2Paddle : MonoBehaviour
 {
+	private GameObject player2Paddle;
 
     public float MovementSpeed = 10f;
 
     private Vector2 playerPos = new Vector2(5.5f, -3.5f);
 
+	void Start()
+	{
+		player2Paddle = GameObject.FindGameObjectWithTag ("Paddle1");
+	}
     // Update is called once per frame
     void Update()
     {
         float newXPos = transform.position.x + (Input.GetAxis("Horizontal2") * MovementSpeed * Time.deltaTime);
-        playerPos = new Vector2(Mathf.Clamp(newXPos, 2, 9), -3.5f);
+		playerPos = new Vector2(Mathf.Clamp(newXPos, 2 + (player2Paddle.transform.localScale.x-1)/2, 9 - (player2Paddle.transform.localScale.x-1)/2), -3.5f);
         transform.position = playerPos;
     }
 
