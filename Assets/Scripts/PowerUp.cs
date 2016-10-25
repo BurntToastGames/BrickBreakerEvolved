@@ -5,6 +5,8 @@ public class PowerUp : MonoBehaviour
 {
     public GameObject PowerUpPaddle;
 
+	public PowerUpKey powerUpName = PowerUpKey.GrowPaddle;
+
     public float FallSpeed = 5f;
 
     Transform trans;
@@ -32,9 +34,10 @@ public class PowerUp : MonoBehaviour
         print(col.gameObject.name);
         if(col.gameObject == PowerUpPaddle)
         {
+			
             print("gottem");
             GameObject.Find("Game Manager").SendMessage("applyPowerUp", new applyPowerUpInfo { player = col.gameObject.tag.EndsWith("1") ? 1 : 2 ,
-                                                                                               powerUpKey = PowerUpKey.Test} );
+																								powerUpKey = powerUpName} );
             Destroy(this.gameObject);
         }
     }
@@ -49,5 +52,5 @@ public struct applyPowerUpInfo
 
 public enum PowerUpKey
 {
-    Test
+    GrowPaddle, ShrinkPaddle
 }

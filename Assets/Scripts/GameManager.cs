@@ -255,12 +255,14 @@ public class Player
 
 public class Power : MonoBehaviour
 {
+	public static float paddleGrowAmount = 1.33f;
+
     public static void Apply(PowerUpKey power, Player player)
     {
         switch (power)
         {
-            case PowerUpKey.Test:
-                Test(player);
+            case PowerUpKey.GrowPaddle:
+                GrowPaddle(player);
                 break;   
         }
     }
@@ -269,4 +271,25 @@ public class Power : MonoBehaviour
     {
         print("PowerUp Received on " + player.name);
     }
+
+	static void GrowPaddle(Player player)//Grow paddle by 33% when the player collects the GrowPaddle powerup
+	{
+		Vector3 originalVector = player.Paddle.transform.localScale;
+		if (player.Paddle.transform.childCount > 0) 
+		{
+			player.Ball.transform.parent = null;
+
+			float interpolate = 0.1f;
+
+			while (interpolate < 1f) {
+				player.Paddle.transform.localScale = Vector3.Lerp( originalVector, paddleGrowAmount * originalVector, interpolate);
+			}
+
+			player.Ball.transform.parent = player.Paddle.transform;
+		} 
+		else 
+		{
+			//player.Paddle.transform.localScale = Vector3.Lerp(paddleGrowAmount, 0f, 0f);
+		}
+	}
 }
